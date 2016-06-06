@@ -1,0 +1,71 @@
+/* This is a CSS file */
+
+.nav-search .ui-btn-up-a {
+    background-image:none;
+    background-color:#333333;
+}
+.nav-search .ui-btn-inner {
+	border-top: 1px solid #888;
+	border-color: rgba(255, 255, 255, .1);
+}
+.manage-fav-author{
+    height:200px;
+    width: 200px;
+}
+.author-thumbnail {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.masonry-authors-list{
+    margin-left: 2%;
+}
+
+.masonry-authors-list li{
+	width: 180px;
+	cursor: pointer;
+    margin-top: 5%;
+    margin-left: 2%;
+} 
+.masonry-authors-list li:hover r{
+	background: gray;
+	color: black;
+}
+
+
+
+.eventBox {
+    position: absolute;
+	float: left;
+	width: 50%;
+	height: 50%;
+	cursor: pointer;
+}
+
+#artImgCont{
+    top:0 !important;
+}
+.comicComic {
+    list-style-type: none;
+	margin: 0;
+	padding: 0;
+	background-color: #FFC0CB;
+}
+
+.comicComic li {
+	margin: 5px 3px 3px 5px;
+	padding: 1px;
+	float: left;
+	width: 163px;
+	height: 160px;
+	text-align: center;
+}
+
+.ui-icon-fbicon:after {
+    background-image: url("http://login.create.net/images/icons/user/facebook_30x30.png");
+}
+/* Fallback */
+.ui-nosvg .ui-icon-fbicon:after {
+	background-image: url("http://login.create.net/images/icons/user/facebook_30x30.png");
+}

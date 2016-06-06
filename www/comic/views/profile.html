@@ -1,0 +1,359 @@
+<!DOCTYPE HTML>
+<html ng-app="comicApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    
+    <!--  Loading css files -->
+   
+    <link rel="stylesheet" href="../../components/loader.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../css/common-style.css" />
+    <link rel="stylesheet" href="../css/masonry-style.css" />  
+    
+    
+    
+    <!-- Loading templates  -->
+    
+    <!-- favorite artist view in profile -->
+    <script id="favorite-author-tmpl" type="text/x-jquery-tmpl">
+        <li class="author-thumbnail pin" id="favli-${id}" >     
+  			<a href="#"  data-inline="true" data-theme="b" onclick="loadComics('${id}',${artcount},'OFF')">
+				<img src="${avatar}"  style="width:150px; height:150px"/>
+			</a>
+		    <div style="width:100%;padding: 2px;">
+				<div style="float:left;text-align:center;width:85%"><label>${screenName}</label></div>
+				<div style="float:right">
+                    <a href="#"  data-inline="true" data-theme="b" onclick="deleteArtist(${id})">
+    					<img src="../images/trash.png" style="height:21px; width:21px"/>
+					</a>
+				</div>
+			</div>
+    	</li>
+    </script>
+    
+    <!-- author view in descrition -->
+    <script id="comic-view-tmpl" type="text/x-jquery-tmpl">
+        <li  id="li-${id}" data-id="${id}" sortorder="${sortOrder}" data-json="${paramL($item)}">
+       	    <a   alt="${fileName}">
+		    	<img src="${s3ThumbUrl}" style=" height: 145px;width: 155px;margin-left: 10px;margin-top: 8px;"alt="${fileName}"/>
+	    	</a>
+	    </li>
+    </script>
+    
+    <!-- artist self view in profile-->
+    <script id="author-own-view-tpl" type="text/x-jquery-tmpl">
+    	 <li class="author-thumbnail pin" id="li-${id}" > 	
+  			<a href="#"  data-inline="true" data-theme="b" onclick="loadComics('${id}',${artcount},'ON')">
+				<img src="${avatar}"  style="width:150px; height:150px"/>
+			</a>
+		    <div style="width:100%;padding: 2px;">
+				<div style="float:left;text-align:center;width:86%"><label>${screenName}</label></div>				
+			</div>	
+	    </li>
+    </script>
+    
+    <!-- author view for manage favorites -->
+    <script id="manage-author-view-tmpl" type="text/x-jquery-tmpl">
+        <li class="author-thumbnail pin manage-fav-author" id="li-${id}" >
+      		<a href="#"  data-inline="true" data-theme="b" onclick="loadArtsOfComic('${id}',${artcount})">
+				<img src="${avatar}"  style="width:180px; height:150px"/>
+			</a>
+			<div style="width:100%;padding: 2px;">
+				<div style="float:left;">
+					<input type="checkbox" class="artistcb" id="cbArtist-${id}" data-id="${id}" onclick="addToFavouriteArtist('${id}')" style="width: 25px;
+						height: 25px;margin-left: -20px;margin-top: 4px;"></input>
+				</div>
+				<div style="margin-left: 25px;text-align:center;width:70% ;cursor:pointer"  title="${screenName}">
+					<label style="width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%">
+						{{if screenName}} ${screenName} {{else}} .  {{/if}} 
+					</label>
+				<div style="text-align: center;width: 100%;margin-top: -1px;">
+						{{if mobileArtist}} <a  data-icon="grid" data-iconpos="notext"></a> {{else}} <a  data-icon="gear" data-iconpos="notext"></a>  {{/if}} 
+						(${artcount})
+				</div>
+				</div>
+				
+				<div  style="cursor:pointer;float:right; margin-top: -18px;">
+					<a href="#"  data-inline="true" data-theme="b" onclick="getDescriptionAboutTheAuthor('${id}')">
+						<img src="../images/whiteQmark.jpg" style="height:21px; width:21px"/>
+					</a>
+				</div>
+				
+			</div>
+    	</li>
+    </script>
+    
+    <!-- author view in search page -->
+    
+    <script id="author-search-view" type="text/x-jquery-tmpl">
+        <li class="author-thumbnail pin manage-fav-author">
+            <div>
+    		   <a href="#"  data-inline="true" data-theme="b" onclick="loadArtsOfComic('${id}',${artcount})">
+    		     	<img src="${avatar}"  style="width:180px; height:150px"/>
+    	     	</a>
+	        </div>
+		    <div style="width:100%;padding: 2px;">
+				<div style="float:left;">
+					<input type="checkbox" class="comicCb" id="cbComic-${id}" data-id="${id}" onclick="addComicToFavouriteArtist('${id}')"  style="width: 25px;
+						height: 25px;margin-left: -20px;margin-top: 4px;"></input>
+				</div>
+				<div style="margin-left: 25px;text-align:center;width:70%">
+					<label style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%">
+						{{if screenName}} ${screenName} {{else}} .  {{/if}} (${artcount})
+					</label>
+				</div>
+				<div  style="cursor:pointer;float:right; margin-top: -18px;">
+					<a href="#"  data-inline="true" data-theme="b" onclick="getDescriptionAboutTheAuthor('${id}')">
+						<img src="../images/whiteQmark.jpg" style="height:21px; width:21px"/>
+					</a>
+				</div>
+			</div>	  
+        </li>
+    </script>
+    
+    <script type="text/javascript">
+        function listMasonry(){
+            $('.masonry-authors-list').masonry({
+                itemSelector : '.pin',
+                isAnimated: true,
+                isFitWidth: true
+            }); 
+        }
+        function reloadMasonry(){
+            $('.masonry-authors-list').masonry('reloadItems')
+        }
+    </script>
+    
+</head>
+
+<body onload="onLoad()" ng-controller='localeController'>    
+    
+    
+        <!-- Profile Main page -->    
+    <div data-role="page" id="profile-main-page" class="ui-responsive-panel" data-prefetch="true" data-dom-cache="true">
+        <!-- profile menu -->
+        <div data-role="panel" id="profile-main-page-menu-panel" data-position="left" data-position-fixed="false" data-display="reveal"  data-theme="a"> 
+            <h3> {{'youCan' | translate }}</h3>
+            <ul data-role="listview" style="margin-top:-16px;" class="nav-search">
+                <li data-icon="lock" id="manage-favorites-link" style="display:none">
+					<a href="#manage-favorite-page" >{{'manageYourFavorites' | translate }}</a>
+				</li>                
+                <li data-icon="gear" >
+        			<a href="#profile-setting-page" > {{'settings' | translate }}</a>
+				</li>                               
+                <li data-icon="info" >
+                	<a href="#" onclick="loadHelpPage()"> {{'help' | translate }}</a>
+				</li>
+                <li data-icon="user" >
+            		<a href="#" onclick="logout()" > {{'logout' | translate }}</a>
+				</li>
+                <li data-icon="power" >
+            		<a href="#" onclick="exitAppPopup()" > {{'exit' | translate }}</a>
+				</li>
+            </ul>
+        </div> 
+        <!-- Profile header-->
+        <div data-role="header">
+            <h1>Comikka</h1>
+            <a href="#profile-main-page-menu-panel" data-icon="bars" data-iconpos="notext"> {{'homeMenu' | translate }}</a>
+    		<a href="#keyword-search-page" data-icon="search" data-iconpos="notext"> {{'search' | translate }}</a>
+        </div>
+        <!-- profile page-->
+        <div data-role="content">
+            <div>
+                <h3 style="display:none" id="no-favorite-msg"> <strong>  {{'noFavoriteMsg' | translate }}</strong></h3>
+               	<ul id="masonry-favorite-authors-list" calss="masonry-authors-list" style="list-style: none; width: 100%"  >
+				</ul>
+			</div>
+        </div>        
+    </div> 
+    
+    
+    <!--ComicDisplay Page -->
+    <div data-role="page" id="comic-view-page"  data-theme="a" data-dom-cache="true" >
+        <div data-role="content" id="imageContentArea"
+            style="text-align: center; clear: both; width: 100%; height: 100%; padding: 0px; margin: 0px">
+			<div id="artImageView"
+				style="clear: both; margin: 0 auto; padding: 0px;">
+				<img id="artImgCont" src=""
+					style="position: relative; float: left; display: block;" alt="Loading Image..."/>				
+				<div id="adNetworkContainer" style="display: none; ">				
+				</div>			
+				<div id="tl" class="eventBox" onclick="prvImage()"
+					title="{{'tlTitle' | translate }}"></div>
+				<div id="tr" class="eventBox rb" style="left: 50%;"
+					onclick="nxtImage()" title="{{'trTitle' | translate }}"></div>
+				<a id="lftBxAnchor">
+					<div id="bl" class="eventBox" onclick="openGotoComicPopup()" title=""></div>
+				</a> <a id="rgtBxAnchor">
+					<div id="br" class="eventBox rb" style="left: 50%;"
+						onclick="loadProfileHomePage()" title=""></div>
+				</a>
+			</div>			
+		</div>      
+        <!-- goto panel dialog -->
+        <div data-role="popup" id="goto-comic-dialog" data-overlay-theme="a" data-close-btn="right">
+            <div data-role="header">
+                <h3>{{'goToComic' | translate }}</h3>
+            </div>
+            <div data-role="content" data-theme="c">
+                <h3> {{'pageNumErr' | translate }}</h3>
+                <form>
+                    <fieldset class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <input type="text" name="comic-current-page-num-txt" id="comic-current-page-num-txt" value="" 
+                                data-theme="c" >                     
+                        </div>
+                        <div class="ui-block-b">
+                            <input type="text" name="comic-total-page-num-txt" id="comic-total-page-num-txt" value=""
+                                data-theme="c" >                        
+                        </div>	   
+                    </fieldset>           
+                    <button type="button" data-theme="a" data-icon="action" onclick="displayComicByPanelNumber()"> {{'ok' | translate }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+     <!-- About the author page -->
+    <div data-role="page" id="about-author-page" class="ui-responsive-panel" data-prefetch="true" data-dom-cache="true" >
+        <!-- Description menu -->
+        <div data-role="panel" id="about-author-page-menu-panel" data-position="left" data-position-fixed="false" data-display="reveal" data-theme="a" > 
+            <h3>{{'youCan' | translate }}</h3>
+            <ul data-role="listview" style="margin-top:-16px;" class="nav-search">
+                <li data-icon="home" > 
+					<a href onclick="loadProfileHomePage()" >{{'backToHome' | translate }}</a>
+				</li>
+                <li data-icon="eye" >
+    				<a href onclick="loadComicsOfComic()" > {{'goToThisComic' | translate }}</a>
+				</li>  
+                <li data-icon="eye" >
+        			<a href="#manage-favorite-page"  > {{'manageYourFavorites' | translate }}</a>
+				</li>
+                <li data-icon="eye" >
+            		<a href="#"  onclick="addComicToFavorites()" >{{'addComicToFavorite' | translate }}</a>
+				</li>
+                <li data-icon="user" >
+                    <a href="javascript: void(0)" onclick="logout()" > {{'logout' | translate }}</a>
+				</li>
+                <li data-icon="power" >
+                	<a href="javascript: void(0)" onclick="exitAppPopup()" > {{'exit' | translate }}</a>
+				</li>
+            </ul>
+        </div> 
+        <!-- Description header-->
+        <div data-role="header">
+            <h1 id="comicScreenName"></h1>
+            <a href="#about-author-page-menu-panel" data-icon="bars" data-iconpos="notext">{{'youCan' | translate }}</a>  
+            <a href="#keyword-search-page" data-icon="search" data-iconpos="notext"> {{'search' | translate }}</a>
+        </div>
+        <div data-role="content">
+            <div style="margin-left: 20px;">
+                <div>
+           			<ul id="comicImages" class="comicComic"></ul>
+                </div><br/>
+                <div style="margin: 20px;" id="comicDescription"> </div>
+            </div>           
+        </div>        
+    </div>
+    
+     <!-- Keyword Search Page -->
+    <div data-role="page" id="keyword-search-page" data-prefetch="true" data-dom-cache="true">
+        <div data-role="header">
+            <h1>{{'searchKeyword' | translate }}</h1>
+            <a href="#" onclick="historyBack()" data-icon="arrow-l" data-iconpos="notext" > {{'back' | translate }}</a>
+        </div>
+        <div  data-role="content">                
+            <input data-type="search" id='keyword-search-txt'></input>    
+            <span style="text-align: center;font-weight: bold;color: green; display: none;" id="searchResultMsg"></span>
+            <div>
+                   <ul id="masonry-authors-search-list" calss="masonry-authors-list" style="list-style: none; width: 100%"  >
+    			</ul>
+			</div>
+        </div>
+    </div>
+    
+    <!-- Profile settings page-->    
+    <div data-role="page" id="profile-setting-page" data-overlay-theme="b" data-close-btn="right">
+        <div data-role="header">
+            <h1>{{'settings' | translate }}</h1>
+            <a href="#"  onclick="loadProfileHomePage()"  data-icon="arrow-l" data-iconpos="notext"> {{'back' | translate }}</a>
+        </div>
+        <div data-role="content">
+            <form>            
+                <label for="profile-setting-password" class="ui-hidden-accessible">Password:</label> 
+                <input type="password" name="profile-setting-password" id="profile-setting-password" value="" placeholder="password"  >
+                <label for="profile-setting-confrm-password" class="ui-hidden-accessible">Confirm password:</label> 
+                <input type="password" name="profile-setting-confrm-password" id="profile-setting-confrm-password" value="" placeholder="Confirm password:"  > 
+                <label for="profile-setting-email" class="ui-hidden-accessible">Email:</label> 
+                <input type="email" name="profile-setting-email" id="profile-setting-email" value="" placeholder="email" >
+                <button type="button" data-theme="a" data-icon="bullets" onclick='resetSettings()'> {{'create' | translate }}</button>
+            </form>
+                   
+            <!-- popup success  message -->
+            <div data-role="popup" id="profile-setting--success-message-popup"data-theme="a" >
+                <a href="#" onclick="loadProfileHomePage()" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
+                <span id="profile-setting-popup-success-message">{{'settingSuccessMsg' | translate }} </span>
+            </div>
+            
+            <!-- popup error  message -->
+            <div data-role="popup" id="profile-setting-error-message-popup"data-theme="a" >
+                <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
+                <span id="setting-popup-error-message"></span>
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- Manage favorites Page -->
+    <div data-role="page" id="manage-favorite-page" class="ui-responsive-panel" data-prefetch="true" data-dom-cache="true">        
+        <!-- Manage Favorites header-->
+        <div data-role="header">
+            <h1>Comikka</h1>
+            <a href="#profile-main-page" data-icon="home" data-iconpos="notext">Home {{'signIn' | translate }}</a>
+    		<a href="#keyword-search-page" data-icon="search" data-iconpos="notext">Search {{'signIn' | translate }}</a>
+        </div>
+        <!-- profile page-->
+        <div data-role="content">
+            <div>
+               	<ul id="masonry-manage-authors-list" calss="masonry-authors-list" style="list-style: none; width: 100%"  >
+				</ul>
+			</div>
+        </div>        
+    </div> 
+    
+    
+    
+    
+    
+    <!-- Loading script files --> 
+    
+    <script type="text/javascript" src="../../components/loader.js"></script>     
+    <script type="text/javascript" src="../js/lib/jquery-tmpl/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="../js/lib/jquery-tmpl/jquery.tmplPlus.min.js"></script>
+    <script type="text/javascript" src="../js/lib/masonry/masonry.pkgd.min.js"></script>
+    <script type="text/javascript" src="../js/lib/jquery-cookie/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../js/lib/image-center/jquery.blImageCenter.js"></script>
+    <script type="text/javascript" src="../js/app/common-paging.js"></script>
+    <script type="text/javascript" src="../js/app/common-image-loading.js"></script> 
+    <script type="text/javascript" src="../js/app/common.js"></script>
+    <script type="text/javascript" src="../js/app/profile-main.js"></script>
+    <script type="text/javascript" src="../js/app/oAuth.js"></script>
+    <script type="text/javascript" src="../js/app/solr-common.js"></script>
+    <script type="text/javascript" src="../js/app/profile-solr-search.js"></script>
+    
+    <!-- Angular scripts -->
+    
+    <script type="text/javascript" src="../js/lib/angular/angular-1.0.5/angular.min.js" ></script>
+    <script type="text/javascript" src="../js/lib/angular/angular-1.0.5/angular-bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/lib/angular/angular-1.0.5/angular-translate.min.js" ></script>
+    <script type="text/javascript" src="../js/lib/angular/angular-1.0.5/angular-translate-loader-static-files.min.js" ></script>
+    <script type="text/javascript" src="../js/lib/angular/angular-1.0.5/angular-translate-loader-url.min.js" ></script>
+    <script type="text/javascript" src="../js/lib/angular/js/script.js"> </script>
+
+    
+    
+</body>
+</html>

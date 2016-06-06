@@ -1,0 +1,366 @@
+<!DOCTYPE HTML>
+<html ng-app="comicApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    
+    <!--  Loading css files -->
+   
+    <link rel="stylesheet" href="../../components/loader.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../css/common-style.css" />
+    <link rel="stylesheet" href="../css/masonry-style.css" />  
+    
+    
+    
+    <!-- Loading templates  -->
+    <script id="author-tmpl" type="text/x-jquery-tmpl">
+        <li class="author-thumbnail pin" >
+            <div >
+            	<a href="#"   onclick="loadComics('${id}',${artcount})">
+			        <img src="${avatar}" style="height:150px; width:150px; margin-top: 5px;"/>
+		        </a>		
+	        </div>
+        	<div style="float:left;width:86% ;" >
+		        <label style="width:85%"> ${screenName} </label>
+	        </div>
+	        <div style="float:right;">
+		        <a href="#"  data-inline="true" data-theme="b" onclick="getDescriptionAboutTheAuthor('${id}')">
+			        <img src="../images/whiteQmark.jpg" style="height:20px; width:20px"/>
+		        </a>
+            </div>
+        </li>
+    </script>
+    
+    <!-- author view in descrition -->
+    <script id="comic-view-tmpl" type="text/x-jquery-tmpl">
+        <li  id="li-${id}" data-id="${id}" sortorder="${sortOrder}" data-json="${paramL($item)}">
+       	    <a   alt="${fileName}">
+		    	<img src="${s3ThumbUrl}" style=" height: 145px;width: 155px;margin-left: 10px;margin-top: 8px;"alt="${fileName}"/>
+	    	</a>
+	    </li>
+    </script>	
+    
+    <script type="text/javascript">
+        function listMasonry(){
+            $('#masonry-authors-list').masonry({
+                itemSelector : '.pin',
+                isAnimated: true,
+                isFitWidth: true
+            }); 
+        }
+        function reloadMasonry(){
+            console.log('reloadMasonry');
+            $('#masonry-authors-list').masonry('reloadItems')
+        }
+    </script>
+    
+</head>
+
+<body onload="onLoad()" ng-controller='localeController'>   
+    <div id="fb-root"> </div> 
+    <script> 
+     	window.fbAsyncInit = function() {
+		    FB.init({
+		      appId      : '1471415316497177',
+		      xfbml      : true,
+		      version    : 'v2.4'
+		    });
+		};
+    	(function(d, s, id) {
+    	     var js, fjs = d.getElementsByTagName(s)[0];
+    	     if (d.getElementById(id)) return;
+    	     js = d.createElement(s); js.id = id;
+    	     js.src = "//connect.facebook.net/en_US/sdk.js";
+    	     fjs.parentNode.insertBefore(js, fjs);
+    	}
+    	(document, 'script', 'facebook-jssdk'));
+   </script>
+    
+    
+        <!-- Home Main page -->
+    
+    
+    <div data-role="page" id="home-main-page" class="ui-responsive-panel" data-prefetch="true" data-dom-cache="true">
+        <!-- home menu -->
+        <div data-role="panel" id="home-main-page-menu-panel" data-position="left" data-position-fixed="false" data-display="reveal"  data-theme="a"> 
+            <h3>{{'youCan' | translate }}</h3>
+            <ul data-role="listview" style="margin-top:-16px;"  >
+                <li data-icon="lock" data-inset="false">
+					<a href="#login-page" >{{'signIn' | translate }}</a>
+				</li>
+                <li data-icon="user" data-inset="false" >
+    				<a href="#create-user-page" >{{'createAccount' | translate }}</a>
+				</li>
+                <li data-icon="gear" data-role="collapsible "  data-inset="false" data-iconpos="right" >
+                    <a href="#change-language-page" > {{'changeLanguage' | translate }}</a>                    
+				</li>               
+                <li class="ui-icon-fbicon" data-inset="false">
+            		<a href="#" onclick="shareOnFacebook()"> {{'shareOnFacebook' | translate }}</a>
+				</li>
+                <li data-icon="twitter" data-inset="false">
+            		<a href="#" onclick="shareOnTwitter()">{{'shareOnTwitter' | translate }}</a>
+				</li>
+                <li data-icon="info" data-inset="false">
+                	<a href="#" onclick="loadHelpPage()"> {{'help' | translate }}</a>
+				</li>
+                <li data-icon="power" data-inset="false">
+            		<a href="#" onclick="exitAppPopup()" > {{'exit' | translate }}</a>
+				</li>
+            </ul>
+        </div> 
+        <!-- Home header-->
+        <div data-role="header">
+            <h1>Comikka</h1>
+            <a href="#home-main-page-menu-panel" data-icon="bars" data-iconpos="notext"> {{'homeMenu' | translate }}</a>
+    		<a href="#keyword-search-page" data-icon="search" data-iconpos="notext"> {{'search' | translate }}</a>
+        </div>
+        <!-- home page-->
+        <div data-role="content">
+            <div>
+               	<ul id="masonry-authors-list" calss="masonry-authors-list" style="list-style: none; width: 100%"  >
+				</ul>
+			</div>
+        </div>        
+    </div> 
+    
+    
+    <!-- Change Language Page -->
+    <div data-role="page" id="change-language-page">
+        <div data-role="header">
+            <h3>{{'changeLanguage' | translate }}</h3>
+            <a href="#home-main-page" data-icon="arrow-l" data-iconpos="notext"> {{'homeMenu' | translate }}</a>
+        </div>
+        <div data-role="content">
+            <ul data-role="listview" >
+                <li ng-repeat="language in languageList">
+                    <a href="#" ng-click='changeLanguage(language)'  >{{language}}</a>                            
+                </li>
+            </ul>
+        </div>
+    </div>
+  
+    
+    <!--ComicDisplay Page -->
+    <div data-role="page" id="comic-view-page"  data-theme="a" data-dom-cache="true" >
+        <div data-role="content" id="imageContentArea"
+        	style="text-align: center; clear: both; width: 100%; height: 100%; padding: 0px; margin: 0px">
+			<div id="artImageView"
+				style="clear: both; margin: 0 auto; padding: 0px;">
+				<img id="artImgCont" src=""
+					style="position: relative; float: left; display: block;" alt="Loading Image..."/>				
+				<div id="adNetworkContainer" style="display: none; ">				
+				</div>			
+				<div id="tl" class="eventBox" onclick="prvImage()"
+					title="{{'tlTitle' | translate }}"></div>
+				<div id="tr" class="eventBox rb" style="left: 50%;"
+					onclick="nxtImage()" title="{{'trTitle' | translate }}"></div>
+				<a id="lftBxAnchor">
+					<div id="bl" class="eventBox" onclick="openGotoComicPopup()" title=""></div>
+				</a> <a id="rgtBxAnchor">
+					<div id="br" class="eventBox rb" style="left: 50%;"
+						onclick="loadHomePage()" title=""></div>
+				</a>
+			</div>			
+		</div>      
+        <!-- goto panel dialog -->
+        <div data-role="popup" id="goto-comic-dialog" data-overlay-theme="a" data-close-btn="right">
+            <div data-role="header">
+                <h3>{{'goToComic' | translate }}</h3>
+            </div>
+            <div data-role="content" data-theme="c">
+                <h3> {{'pageNumErr' | translate }}</h3>
+                <form>
+                    <fieldset class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <input type="text" name="comic-current-page-num-txt" id="comic-current-page-num-txt" value="" 
+                                data-theme="c" >                     
+                        </div>
+                        <div class="ui-block-b">
+                            <input type="text" name="comic-total-page-num-txt" id="comic-total-page-num-txt" value=""
+                                data-theme="c" >                        
+                        </div>	   
+                    </fieldset> 
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                	        <a href="#" onclick="shareOnFacebookArt()">Share on Facebook</a>
+				        </div>
+                        <div data-icon="twitter" >
+            		        <a href="#" onclick="shareOnTwitterArt()">Share on Twitter</a>
+			    	    </div> 
+                    <button type="button" data-theme="a" data-icon="action" onclick="displayComicByPanelNumber()">Ok {{'ok' | translate }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Forgot password page -->
+    <div data-role="page" id="forgot-passowrd-page" >
+        <div data-role="header">
+            <h3> {{'forgotPwd' | translate }}</h3>
+            <a href="#"  onclick="loadHomePage()"  data-icon="arrow-l" data-iconpos="notext"> {{'back' | translate }}</a>
+        </div>
+        <div data-role="content">
+            <h5> {{'fpHeaderMsg' | translate }}</h5>
+            <form>
+                <label for="fEmail" class="ui-hidden-accessible">Email:</label> 
+                <input type="email" name="fEmail" id="fEmail" value="" placeholder="email" >            
+                <button type="button" data-theme="a" data-icon="gear" onclick="validateAndSendResetPasswordLink()"> {{'fpHeaderMsg' | translate }}</button>
+            </form>
+        </div>
+        <!-- popup success message -->
+        <div data-role="popup" id="forgot-password-success-message-popup" data-theme="a">
+            <a href="#" onclick="loadHomePage()" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
+            <p>
+                {{'fpSuccessMsg' | translate }}
+    	    </p>
+        </div>
+        
+        <!-- popup Error message -->
+        <div data-role="popup" id="forgot-password-error-message-popup"data-theme="a" >
+            <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
+            <p>
+                {{'fpErrorMsg' | translate }}
+    	    </p>
+        </div>
+    </div>
+
+    <!--create user page -->
+    <div data-role="page" id="create-user-page" data-overlay-theme="b" data-close-btn="right">
+        <div data-role="header">
+            <h1> {{'createUserHeader' | translate }}</h1>
+            <a href="#"  onclick="loadHomePage()"  data-icon="arrow-l" data-iconpos="notext"> {{'back' | translate }}</a>
+        </div>
+        <div data-role="content">
+            <form>
+                <label for="new-username" class="ui-hidden-accessible">Username:</label> 
+                <input type="text" name="new-username" id="new-username" value="" placeholder="username"  > 
+                <label for="new-password" class="ui-hidden-accessible">Password:</label> 
+                <input type="password" name="new-password" id="new-password" value="" placeholder="password"  >
+                <label for="new-email" class="ui-hidden-accessible">Email:</label> 
+                <input type="email" name="new-email" id="new-email" value="" placeholder="email" >
+                <button type="button" data-theme="a" data-icon="bullets" onclick='newUserRegistration()'> {{'create' | translate }}</button>
+            </form>
+                   
+            <!-- popup  message -->
+            <div data-role="popup" id="create-user-message-popup"data-theme="a" >
+                <a href="#" onclick="loadHomePage()" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
+                <span id="create-user-popup-message"></span>
+            </div>
+        </div>
+    </div>
+    
+    
+     <!-- About the author page -->
+    <div data-role="page" id="about-author-page" class="ui-responsive-panel" data-prefetch="true" data-dom-cache="true" >
+        <!-- Description menu -->
+        <div data-role="panel" id="about-author-page-menu-panel" data-position="left" data-position-fixed="false" data-display="reveal" data-theme="a" > 
+            <h3> {{'youCan' | translate }}</h3>
+            <ul data-role="listview" style="margin-top:-16px;" class="nav-search">
+            	<li data-icon="home" > 
+					<a href onclick="loadHomePage()" >{{'backToHome' | translate }}</a>
+				</li>
+                <li data-icon="eye" >
+    				<a href onclick="loadComicsOfComic()" > {{'goToThisComic' | translate }}</a>
+				</li>                
+                <li data-icon="power" >
+                	<a href="javascript: void(0)" onclick="exitAppPopup()" > {{'exit' | translate }}</a>
+				</li>
+            </ul>
+        </div> 
+        <!-- Description header-->
+        <div data-role="header">
+            <h1 id="comicScreenName"></h1>
+            <a href="#about-author-page-menu-panel" data-icon="bars" data-iconpos="notext"> {{'youCan' | translate }}</a>  
+            <a href="#keyword-search-page" data-icon="search" data-iconpos="notext"> {{'search' | translate }}</a>
+        </div>
+        <div data-role="content">
+            <div style="margin-left: 20px;">
+                <div>
+           			<ul id="comicImages" class="comicComic"></ul>
+                </div><br/>
+                <div style="margin: 20px;" id="comicDescription"> </div>
+            </div>           
+        </div>        
+    </div>
+    
+     <!-- Keyword Search Page -->
+    <div data-role="page" id="keyword-search-page" data-prefetch="true" data-dom-cache="true">
+        <div data-role="header">
+            <h1> {{'searchKeyword' | translate }}</h1>
+            <a href="#" onclick="historyBack()" data-icon="arrow-l" data-iconpos="notext" > {{'back' | translate }}</a>
+        </div>
+        <div  data-role="content">                
+            <input data-type="search" id='keyword-search-txt'></input>    
+            <span style="text-align: center;font-weight: bold;color: green; display: none;" id="searchResultMsg"></span>
+            <div>
+                   <ul id="masonry-authors-search-list" calss="masonry-authors-list" style="list-style: none; width: 100%"  >
+    			</ul>
+			</div>
+        </div>
+    </div>
+    
+    <!-- Login page -->
+    
+    <div data-role="page" id="login-page"  >
+        <div data-role="header">
+            <h1> {{'pleaseLogin' | translate }}</h1>
+            <a href="#" onclick="loadHomePage()" data-icon="arrow-l" data-iconpos="notext"> {{'back' | translate }}</a>
+        </div>
+        <div data-role="content" >
+            <form>
+                <label for="lUsername" class="ui-hidden-accessible">Username:</label> 
+                <input type="text" name="lUsername" id="lUsername" value="" placeholder="username"
+                    data-theme="c"> 
+                <label for="lPassword" class="ui-hidden-accessible">Password:</label> 
+                <input type="password" name="lPassword" id="lPassword" value="" placeholder="password"
+                    data-theme="c">
+                <button type="button" data-theme="a" data-icon="check" onclick="doLogin()"> {{'signIn' | translate }}</button>
+            </form>        
+            <a href="#forgot-passowrd-page"  >{{'forgotYourPassword' | translate }}</a>        
+        </div>
+        
+        <!-- Popup message -->
+        
+        <div data-role="popup" id="login-message-popup" data-theme="a">
+            <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
+            <span id="login-popup-error-msg"></span>
+        </div>   
+    </div>
+
+
+
+
+    
+    <!-- Loading script files --> 
+    
+    <script type="text/javascript" src="../../components/loader.js"></script>     
+    <script type="text/javascript" src="../js/lib/jquery-tmpl/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="../js/lib/jquery-tmpl/jquery.tmplPlus.min.js"></script>
+    <script type="text/javascript" src="../js/lib/masonry/masonry.pkgd.min.js"></script>
+    <script type="text/javascript" src="../js/lib/jquery-cookie/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../js/lib/image-center/jquery.blImageCenter.js"></script>
+    <script type="text/javascript" src="../js/app/home-load-authors.js"></script>
+    <script type="text/javascript" src="../js/app/common-paging.js"></script>
+    <script type="text/javascript" src="../js/app/common-image-loading.js"></script> 
+    <script type="text/javascript" src="../js/app/common.js"></script>
+    <script type="text/javascript" src="../js/app/home-main.js"></script>
+    <script type="text/javascript" src="../js/app/home-auth.js"></script>
+    <script type="text/javascript" src="../js/app/solr-common.js"></script>
+    <script type="text/javascript" src="../js/app/solr-search.js"></script>
+    
+    <!-- Angular scripts -->
+    
+    <script type="text/javascript" src="../js/lib/angular/angular-1.0.5/angular.min.js" ></script>
+    <script type="text/javascript" src="../js/lib/angular/angular-1.0.5/angular-bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/lib/angular/angular-1.0.5/angular-translate.min.js" ></script>
+    <script type="text/javascript" src="../js/lib/angular/angular-1.0.5/angular-translate-loader-static-files.min.js" ></script>
+    <script type="text/javascript" src="../js/lib/angular/angular-1.0.5/angular-translate-loader-url.min.js" ></script>
+    <script type="text/javascript" src="../js/lib/angular/js/script.js"> </script>
+
+
+    
+    
+</body>
+</html>
