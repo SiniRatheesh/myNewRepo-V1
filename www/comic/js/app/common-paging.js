@@ -8,8 +8,19 @@ $(document)
     });
 
 $(function(){
-    if (window.location.hash == "#_=_") window.location.hash = ""; 
+   // if (window.location.hash == "#_=_") window.location.hash = ""; 
 })
+function refreshPage() {
+  $.mobile.changePage(
+    window.location.href,
+    {
+      allowSamePageTransition : true,
+      transition              : 'none',
+      showLoadMsg             : false,
+      reloadPage              : true
+    }
+  );
+}
 
 $(document).ajaxStart(function(){ 
     loaderShow();

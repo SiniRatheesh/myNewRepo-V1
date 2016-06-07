@@ -90,11 +90,13 @@ $(function () {
         });
         
         if($.cookie('isCookie')){
-    		currentArtIndex = 	$.cookie('currentArtIndex');
-			selectedArtist	=	$.cookie('selectedArtist');
-			currentArtistArts	=	$.cookie('currentArtistArts');
-			console.log('hi entered in cookieeeeeee')
-			changeArtTo(currentArtIndex, currentArtIndex + 1);
+   //  		currentArtIndex = 	$.cookie('currentArtIndex');
+			// selectedArtist	=	$.cookie('selectedArtist');
+			// currentArtistArts	=	$.cookie('currentArtistArts');
+			// console.log('hi entered in cookieeeeeee')
+			// changeArtTo(currentArtIndex, currentArtIndex + 1);
+            console.log('hi entered in cookieeeeeee')
+            refreshPage();
 
 		}
 });
