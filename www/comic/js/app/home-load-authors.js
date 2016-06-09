@@ -24,6 +24,7 @@ function appendToMasonryList(authorList){
 	$('#masonry-authors-list').masonry().masonry('reloadItems');
 }
 function loadFirstSetAuthors(uuid){
+    console.log('loading....')
     loaderShow();
    	$.getJSON(REPORT_SERVER+'artistQuery?q=usageTracking&role=ADMIN&uuid='+uuid+'&type='+type+'&fromIndex='+fromIndex,
    	function(data) {

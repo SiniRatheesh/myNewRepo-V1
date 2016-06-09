@@ -8,6 +8,9 @@ var stHours = todayDate.getHours();
 var stMinutes = todayDate.getMinutes();
 var stSeconds = todayDate.getSeconds();
 
+
+openFB.init({appId: '1471415316497177'});
+
 function shareOnFacebook(){
     var url = "http://www.facebook.com/sharer/sharer.php?u=www.comikka.com";
     windowOpenIntent(url);
@@ -18,19 +21,37 @@ function shareOnTwitter(){
     windowOpenIntent(url);
 }
 
-function shareOnFacebookArt(){
-   // var descriptionCOmics = $('#comicDescription').html(descriptionforComic).text();
-       	  FB.ui({
-    		  method: 'share',
-    		  title:screenName,
-    		  href: 'http://www.comikka.com/artist/' +userId,
-    		  picture: imageUrl,
-    	        caption: 'comikka',
-    	      //  description: descriptionCOmics
-              description: descriptionforComic
-    		}, function(response){console.log(response);});
-}
+// function shareOnFacebookArt(){
+//    // var descriptionCOmics = $('#comicDescription').html(descriptionforComic).text();
+//        	  FB.ui({
+//     		  method: 'share',
+//     		  title:screenName,
+//     		  href: 'http://www.comikka.com/artist/' +userId,
+//     		  picture: imageUrl,
+//     	        caption: 'comikka',
+//     	      //  description: descriptionCOmics
+//               description: descriptionforComic
+//     		}, function(response){console.log(response);});
+// }
 
+ function shareOnFacebookArt() {
+        openFB.api({
+            method: 'POST',
+            path: '/me/feed',
+            params: {
+                message: descriptionforComic,
+                title:screenName,
+                picture: imageUrl,
+                caption: 'comikka'
+                // href: 'http://www.comikka.com/artist/' +userId
+            },
+            success: function() {
+                console.log('the item was posted on Facebook');
+            },
+            error: function(e) {
+                console.log('error ' + JSON.stringify(e));
+            }});
+    }
 function shareOnTwitterArt(){
     var url = "http://twitter.com/intent/tweet?text=CheckOut&hashtags=Comikka,mobileComics&url=http://www.comikka.com/artist/"+userId;
     windowOpenIntent(url);

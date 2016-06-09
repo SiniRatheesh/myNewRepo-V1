@@ -1,5 +1,5 @@
     function onLoad() {
-        window.location="comic/views/home.html";
+      //  window.location="comic/views/home.html";
         document.addEventListener("deviceready", onDeviceReady, false);        
     }    
     

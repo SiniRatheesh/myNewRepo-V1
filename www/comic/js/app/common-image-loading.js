@@ -89,16 +89,16 @@ $(function () {
             $.mobile.loading( 'hide' );
         });
         
-        if($.cookie('isCookie')){
+       // if($.cookie('isCookie')){
    //  		currentArtIndex = 	$.cookie('currentArtIndex');
 			// selectedArtist	=	$.cookie('selectedArtist');
 			// currentArtistArts	=	$.cookie('currentArtistArts');
 			// console.log('hi entered in cookieeeeeee')
 			// changeArtTo(currentArtIndex, currentArtIndex + 1);
-            console.log('hi entered in cookieeeeeee')
-            refreshPage();
-
-		}
+//             console.log('hi entered in cookieeeeeee')
+//             refreshPage();
+// 
+// 		}
 });
 
 
@@ -122,50 +122,50 @@ function displayComicByPanelNumber(){
 	 	}
 	 }
 }
-function displayNetworkAd(networkname){
-    $('#artImgCont').css({ 'display': 'none'});
-    $('#adNetworkContainer').empty();
-    $('#adNetworkContainer').append('<iframe src="network-ads/' + networkname + '.html" width="300px" height="250px" frameborder="0" marginwidth ="0px" marginheight="0px" scrolling="no" ></iframe>');
-    $('#adNetworkContainer').css({ 'display': 'block'});
-       
-}
-function loadNetworkAds(currentAuthor){
-    if (currentAuthor.advFile != null && currentAuthor.advFile.length > 0) {
-        if (currentAuthor.advertiserUserId == 'AdNetwork') {
-            displayNetworkAd('adFrame');
-        } else if (currentAuthor.advertiserUserId == 'MillennialAdNetwork'){
-            getMilleniaAd();
-            str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&mmnw=1&index=" + CUR_INDEX;
-        } else if (currentAuthor.advertiserUserId == 'googleAdSense') {
-            str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&gadnw=1&index=" + CUR_INDEX;
-            displayNetworkAd('googleAd');
-        }else if (currentAuthor.advertiserUserId == 'leadboltad'){
-            str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&lbadnw=1&index=" + CUR_INDEX;
-            displayNetworkAd('leadBoltAd');
-        }else if (currentAuthor.advertiserUserId == 'propellerads'){
-            str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&padnw=1&index=" + CUR_INDEX;
-            displayNetworkAd('propellerAds');
-        }else if (currentAuthor.advertiserUserId == 'airpushads') {
-            str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&apadnw=1&index=" + CUR_INDEX;
-            displayNetworkAd('airpushAd');
-        } else if (currentAuthor.advertiserUserId == 'mopubads'){
-            str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&mpadnw=1&index=" + CUR_INDEX;
-            displayNetworkAd('mopubAds');
-        }else if (currentAuthor.advertiserUserId == 'adclickmedias'){
-            str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&adcdnw=1&index=" + CUR_INDEX;
-            displayNetworkAd('AdclickMedia');
-        }else {
-            //TODO 
-            anchrs.attr("href", currentAuthor.advFile.targetUrl).attr("target", "_newtab");
-            str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&index=" + CUR_INDEX;
-            $('#artImgCont').css({ 'display': 'block'});
-            $('#adNetworkContainer').css({ 'display': 'none'});
-        }
-    } else if (currentAuthor.artfile != null && currentAuthor.artfile > 0) {
-        $('#artImgCont').css({ 'display': 'block'});           
-        $('#adNetworkContainer').css({ 'display': 'none'});            
-    }
-}	
+// function displayNetworkAd(networkname){
+//     $('#artImgCont').css({ 'display': 'none'});
+//     $('#adNetworkContainer').empty();
+//     $('#adNetworkContainer').append('<iframe src="network-ads/' + networkname + '.html" width="300px" height="250px" frameborder="0" marginwidth ="0px" marginheight="0px" scrolling="no" ></iframe>');
+//     $('#adNetworkContainer').css({ 'display': 'block'});
+//        
+// }
+// function loadNetworkAds(currentAuthor){
+//     if (currentAuthor.advFile != null && currentAuthor.advFile.length > 0) {
+//         if (currentAuthor.advertiserUserId == 'AdNetwork') {
+//             displayNetworkAd('adFrame');
+//         } else if (currentAuthor.advertiserUserId == 'MillennialAdNetwork'){
+//             getMilleniaAd();
+//             str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&mmnw=1&index=" + CUR_INDEX;
+//         } else if (currentAuthor.advertiserUserId == 'googleAdSense') {
+//             str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&gadnw=1&index=" + CUR_INDEX;
+//             displayNetworkAd('googleAd');
+//         }else if (currentAuthor.advertiserUserId == 'leadboltad'){
+//             str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&lbadnw=1&index=" + CUR_INDEX;
+//             displayNetworkAd('leadBoltAd');
+//         }else if (currentAuthor.advertiserUserId == 'propellerads'){
+//             str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&padnw=1&index=" + CUR_INDEX;
+//             displayNetworkAd('propellerAds');
+//         }else if (currentAuthor.advertiserUserId == 'airpushads') {
+//             str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&apadnw=1&index=" + CUR_INDEX;
+//             displayNetworkAd('airpushAd');
+//         } else if (currentAuthor.advertiserUserId == 'mopubads'){
+//             str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&mpadnw=1&index=" + CUR_INDEX;
+//             displayNetworkAd('mopubAds');
+//         }else if (currentAuthor.advertiserUserId == 'adclickmedias'){
+//             str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&adcdnw=1&index=" + CUR_INDEX;
+//             displayNetworkAd('AdclickMedia');
+//         }else {
+//             //TODO 
+//             anchrs.attr("href", currentAuthor.advFile.targetUrl).attr("target", "_newtab");
+//             str = "&aid=" + selectedArtist.id + "&advertiserId=" + currentAuthor.advFile.advertiserId + "&id=" + currentAuthor.advFile.id + "&index=" + CUR_INDEX;
+//             $('#artImgCont').css({ 'display': 'block'});
+//             $('#adNetworkContainer').css({ 'display': 'none'});
+//         }
+//     } else if (currentAuthor.artfile != null && currentAuthor.artfile > 0) {
+//         $('#artImgCont').css({ 'display': 'block'});           
+//         $('#adNetworkContainer').css({ 'display': 'none'});            
+//     }
+// }	
 	function changeImageURL(newurl, artadobj){
 		flag = true;
 		CUR_UID = Date.now();
@@ -173,12 +173,12 @@ function loadNetworkAds(currentAuthor){
 		CUR_ITEM = artadobj;
 		replaceToolTips();	 
 		CUR_INDEX =  currentArtIndex;
-		$.cookie('isCookie', true);    
-		$.cookie('currentArtIndex', currentArtIndex);
-		$.cookie('currentArtistArts', currentArtistArts);
-		$.cookie('selectedArtist', selectedArtist);
+		// $.cookie('isCookie', true);    
+		// $.cookie('currentArtIndex', currentArtIndex);
+		// $.cookie('currentArtistArts', currentArtistArts);
+		// $.cookie('selectedArtist', selectedArtist);
 		
-		if(window.location.href.indexOf("profile.html") == -1 && window.canRunAds === undefined ){
+		if(window.location.href.indexOf("profile.html") == -1 && window.canRunAds === undefined ){cookie
 		    str = "&blockAdv=1";
 		    $('#artImgCont').css({'display':'none'});
 			$('#adNetworkContainer').empty();
@@ -316,10 +316,10 @@ function loadNetworkAds(currentAuthor){
 	function loadComics(userid, cnt,stream){
 		secondLoaded = false;	
         currentArtIndex = -1;
-        $.cookie('isCookie', false);    
-		$.cookie('currentArtIndex', -1);
-		$.cookie('currentArtistArts', null);
-		$.cookie('selectedArtist', null);
+  //       $.cookie('isCookie', false);    
+		// $.cookie('currentArtIndex', -1);
+		// $.cookie('currentArtistArts', null);
+		// $.cookie('selectedArtist', null);
         
 		if(cnt <= 0){
 	 		alert("That artist is not currently showing any art");
@@ -352,10 +352,10 @@ function loadNetworkAds(currentAuthor){
 			return;
 		}
         currentArtIndex = -1;
-        $.cookie('isCookie', false);    
-    	$.cookie('currentArtIndex', -1);
-		$.cookie('currentArtistArts', null);
-		$.cookie('selectedArtist', null);
+  //       $.cookie('isCookie', false);    
+  //   	$.cookie('currentArtIndex', -1);
+		// $.cookie('currentArtistArts', null);
+		// $.cookie('selectedArtist', null);
 	 	currentuserid = userid;
 	 	selectedArtist = artist
 	 	loadArtsByArtist();

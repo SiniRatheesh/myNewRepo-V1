@@ -25,22 +25,21 @@
             exitAppPopup();
         }else if(isProfilePage()){
              logout();
-        }
-  //       else{
+        } else{
   //           $.cookie('isCookie', false);    
   //   	$.cookie('currentArtIndex', -1);
 		// $.cookie('currentArtistArts', null);
 		// $.cookie('selectedArtist', null);
   //       console.log('going back....')
-  //           window.history.back();
-  //       }
+             window.history.back();
+       }
     }   
     
     function exitAppPopup() {
-        $.cookie('isCookie', false);    
-    	$.cookie('currentArtIndex', -1);
-		$.cookie('currentArtistArts', null);
-		$.cookie('selectedArtist', null);
+  //       $.cookie('isCookie', false);    
+  //   	$.cookie('currentArtIndex', -1);
+		// $.cookie('currentArtistArts', null);
+		// $.cookie('selectedArtist', null);
         navigator.notification.confirm(
             "Do you really want to close this app?", 
             function(buttonIndex){
@@ -64,10 +63,10 @@
     };
      
     function logout(){
-        $.cookie('isCookie', false);    
-    	$.cookie('currentArtIndex', -1);
-		$.cookie('currentArtistArts', null);
-		$.cookie('selectedArtist', null);
+  //       $.cookie('isCookie', false);    
+  //   	$.cookie('currentArtIndex', -1);
+		// $.cookie('currentArtistArts', null);
+		// $.cookie('selectedArtist', null);
         $.getJSON(REST_SERVER+'logOut',
     					function(data) {
 			if (data.response = "success") {

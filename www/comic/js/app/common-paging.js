@@ -2,8 +2,8 @@ $(document)
     .bind("mobileinit", function()
     {
         $.mobile.defaultPageTransition = 'none';
-      //  $.mobile.ajaxEnabled = 'false';
-      $.mobile.allowCrossDomainPages = true;
+       // $.mobile.ajaxEnabled = 'true';
+        $.mobile.allowCrossDomainPages = true;
         $.mobile.page.prototype.options.domCache = true;
     });
 
@@ -52,10 +52,10 @@ $(document).on("click", "#comicDescription a", function(e){e.preventDefault();
 function loadHomePage()
 {
     $.mobile.changePage("#home-main-page", { transition: "none" });
-    $.cookie('isCookie', false);    
-    $.cookie('currentArtIndex', -1);
-	$.cookie('currentArtistArts', null);
-	$.cookie('selectedArtist', null);
+ //    $.cookie('isCookie', false);    
+ //    $.cookie('currentArtIndex', -1);
+	// $.cookie('currentArtistArts', null);
+	// $.cookie('selectedArtist', null);
     listMasonry();
     reloadMasonry();
 }

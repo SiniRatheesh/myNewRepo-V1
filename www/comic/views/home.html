@@ -61,21 +61,22 @@
 <body onload="onLoad()" ng-controller='localeController'>   
     <div id="fb-root"> </div> 
     <script> 
-     	window.fbAsyncInit = function() {
-		    FB.init({
-		      appId      : '1471415316497177',
-		      xfbml      : true,
-		      version    : 'v2.4'
-		    });
-		};
-    	(function(d, s, id) {
-    	     var js, fjs = d.getElementsByTagName(s)[0];
-    	     if (d.getElementById(id)) return;
-    	     js = d.createElement(s); js.id = id;
-    	     js.src = "https://connect.facebook.net/en_US/sdk.js";
-    	     fjs.parentNode.insertBefore(js, fjs);
-    	}
-    	(document, 'script', 'facebook-jssdk'));
+    
+  //    	window.fbAsyncInit = function() {
+		//     FB.init({
+		//       appId      : '1471415316497177',
+		//       xfbml      : true,
+		//       version    : 'v2.4'
+		//     });
+		// };
+  //   	(function(d, s, id) {
+  //   	     var js, fjs = d.getElementsByTagName(s)[0];
+  //   	     if (d.getElementById(id)) return;
+  //   	     js = d.createElement(s); js.id = id;
+  //   	     js.src = "https://connect.facebook.net/en_US/sdk.js";
+  //   	     fjs.parentNode.insertBefore(js, fjs);
+  //   	}
+  //   	(document, 'script', 'facebook-jssdk'));
    </script>
     
     
@@ -87,25 +88,25 @@
         <div data-role="panel" id="home-main-page-menu-panel" data-position="left" data-position-fixed="false" data-display="reveal"  data-theme="a"> 
             <h3>{{'youCan' | translate }}</h3>
             <ul data-role="listview" style="margin-top:-16px;"  >
-                <li data-icon="lock" data-inset="false">
-					<a href="#login-page" >{{'signIn' | translate }}</a>
+                <li data-icon="lock" >
+					<a href="#login-page" > {{'signIn' | translate }} </a>
 				</li>
-                <li data-icon="user" data-inset="false" >
+                <li data-icon="user" >
     				<a href="#create-user-page" >{{'createAccount' | translate }}</a>
 				</li>
-                <li data-icon="gear" data-role="collapsible "  data-inset="false" data-iconpos="right" >
+                <li data-icon="gear"  >
                     <a href="#change-language-page" > {{'changeLanguage' | translate }}</a>                    
 				</li>               
-                <li class="ui-icon-fbicon" data-inset="false">
+                <li class="ui-icon-fbicon" >
             		<a href="#" onclick="shareOnFacebook()"> {{'shareOnFacebook' | translate }}</a>
 				</li>
-                <li data-icon="twitter" data-inset="false">
+                <li data-icon="twitter" >
             		<a href="#" onclick="shareOnTwitter()">{{'shareOnTwitter' | translate }}</a>
 				</li>
-                <li data-icon="info" data-inset="false">
+                <li data-icon="info" >
                 	<a href="#" onclick="loadHelpPage()"> {{'help' | translate }}</a>
 				</li>
-                <li data-icon="power" data-inset="false">
+                <li data-icon="power" >
             		<a href="#" onclick="exitAppPopup()" > {{'exit' | translate }}</a>
 				</li>
             </ul>
@@ -123,134 +124,7 @@
 				</ul>
 			</div>
         </div>        
-    </div> 
-    
-    
-    <!-- Change Language Page -->
-    <div data-role="page" id="change-language-page">
-        <div data-role="header">
-            <h3>{{'changeLanguage' | translate }}</h3>
-            <a href="#home-main-page" data-icon="arrow-l" data-iconpos="notext"> {{'homeMenu' | translate }}</a>
-        </div>
-        <div data-role="content">
-            <ul data-role="listview" >
-                <li ng-repeat="language in languageList">
-                    <a href="#" ng-click='changeLanguage(language)'  >{{language}}</a>                            
-                </li>
-            </ul>
-        </div>
-    </div>
-  
-    
-    <!--ComicDisplay Page -->
-    <div data-role="page" id="comic-view-page"  data-theme="a" data-dom-cache="true" >
-        <div data-role="content" id="imageContentArea"
-        	style="text-align: center; clear: both; width: 100%; height: 100%; padding: 0px; margin: 0px">
-			<div id="artImageView"
-				style="clear: both; margin: 0 auto; padding: 0px;">
-				<img id="artImgCont" src=""
-					style="position: relative; float: left; display: block;" alt="Loading Image..."/>				
-				<div id="adNetworkContainer" style="display: none; ">				
-				</div>			
-				<div id="tl" class="eventBox" onclick="prvImage()"
-					title="{{'tlTitle' | translate }}"></div>
-				<div id="tr" class="eventBox rb" style="left: 50%;"
-					onclick="nxtImage()" title="{{'trTitle' | translate }}"></div>
-				<a id="lftBxAnchor">
-					<div id="bl" class="eventBox" onclick="openGotoComicPopup()" title=""></div>
-				</a> <a id="rgtBxAnchor">
-					<div id="br" class="eventBox rb" style="left: 50%;"
-						onclick="loadHomePage()" title=""></div>
-				</a>
-			</div>			
-		</div>      
-        <!-- goto panel dialog -->
-        <div data-role="popup" id="goto-comic-dialog" data-overlay-theme="a" data-close-btn="right">
-            <div data-role="header">
-                <h3>{{'goToComic' | translate }}</h3>
-            </div>
-            <div data-role="content" data-theme="c">
-                <h3> {{'pageNumErr' | translate }}</h3>
-                <form>
-                    <fieldset class="ui-grid-a">
-                        <div class="ui-block-a">
-                            <input type="text" name="comic-current-page-num-txt" id="comic-current-page-num-txt" value="" 
-                                data-theme="c" >                     
-                        </div>
-                        <div class="ui-block-b">
-                            <input type="text" name="comic-total-page-num-txt" id="comic-total-page-num-txt" value=""
-                                data-theme="c" >                        
-                        </div>	   
-                    </fieldset> 
-                    <div class="ui-grid-a">
-                        <div class="ui-block-a">
-                	        <a href="#" onclick="shareOnFacebookArt()">Share on Facebook</a>
-				        </div>
-                        <div data-icon="twitter" >
-            		        <a href="#" onclick="shareOnTwitterArt()">Share on Twitter</a>
-			    	    </div> 
-                    <button type="button" data-theme="a" data-icon="action" onclick="displayComicByPanelNumber()">Ok {{'ok' | translate }}</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Forgot password page -->
-    <div data-role="page" id="forgot-passowrd-page" >
-        <div data-role="header">
-            <h3> {{'forgotPwd' | translate }}</h3>
-            <a href="#"  onclick="loadHomePage()"  data-icon="arrow-l" data-iconpos="notext"> {{'back' | translate }}</a>
-        </div>
-        <div data-role="content">
-            <h5> {{'fpHeaderMsg' | translate }}</h5>
-            <form>
-                <label for="fEmail" class="ui-hidden-accessible">Email:</label> 
-                <input type="email" name="fEmail" id="fEmail" value="" placeholder="email" >            
-                <button type="button" data-theme="a" data-icon="gear" onclick="validateAndSendResetPasswordLink()"> {{'fpHeaderMsg' | translate }}</button>
-            </form>
-        </div>
-        <!-- popup success message -->
-        <div data-role="popup" id="forgot-password-success-message-popup" data-theme="a">
-            <a href="#" onclick="loadHomePage()" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
-            <p>
-                {{'fpSuccessMsg' | translate }}
-    	    </p>
-        </div>
-        
-        <!-- popup Error message -->
-        <div data-role="popup" id="forgot-password-error-message-popup"data-theme="a" >
-            <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
-            <p>
-                {{'fpErrorMsg' | translate }}
-    	    </p>
-        </div>
-    </div>
-
-    <!--create user page -->
-    <div data-role="page" id="create-user-page" data-overlay-theme="b" data-close-btn="right">
-        <div data-role="header">
-            <h1> {{'createUserHeader' | translate }}</h1>
-            <a href="#"  onclick="loadHomePage()"  data-icon="arrow-l" data-iconpos="notext"> {{'back' | translate }}</a>
-        </div>
-        <div data-role="content">
-            <form>
-                <label for="new-username" class="ui-hidden-accessible">Username:</label> 
-                <input type="text" name="new-username" id="new-username" value="" placeholder="username"  > 
-                <label for="new-password" class="ui-hidden-accessible">Password:</label> 
-                <input type="password" name="new-password" id="new-password" value="" placeholder="password"  >
-                <label for="new-email" class="ui-hidden-accessible">Email:</label> 
-                <input type="email" name="new-email" id="new-email" value="" placeholder="email" >
-                <button type="button" data-theme="a" data-icon="bullets" onclick='newUserRegistration()'> {{'create' | translate }}</button>
-            </form>
-                   
-            <!-- popup  message -->
-            <div data-role="popup" id="create-user-message-popup"data-theme="a" >
-                <a href="#" onclick="loadHomePage()" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
-                <span id="create-user-popup-message"></span>
-            </div>
-        </div>
-    </div>
-    
+    </div>     
     
      <!-- About the author page -->
     <div data-role="page" id="about-author-page" class="ui-responsive-panel" data-prefetch="true" data-dom-cache="true" >
@@ -258,8 +132,8 @@
         <div data-role="panel" id="about-author-page-menu-panel" data-position="left" data-position-fixed="false" data-display="reveal" data-theme="a" > 
             <h3> {{'youCan' | translate }}</h3>
             <ul data-role="listview" style="margin-top:-16px;" class="nav-search">
-            	<li data-icon="home" > 
-					<a href onclick="loadHomePage()" >{{'backToHome' | translate }}</a>
+                <li data-icon="home" > 
+    				<a href onclick="loadHomePage()" >{{'backToHome' | translate }}</a>
 				</li>
                 <li data-icon="eye" >
     				<a href onclick="loadComicsOfComic()" > {{'goToThisComic' | translate }}</a>
@@ -285,7 +159,32 @@
         </div>        
     </div>
     
-     <!-- Keyword Search Page -->
+    <!--create user page -->
+    <div data-role="page" id="create-user-page" data-overlay-theme="b" data-close-btn="right">
+        <div data-role="header">
+            <h1> {{'createUserHeader' | translate }}</h1>
+            <a href="#"  onclick="loadHomePage()"  data-icon="arrow-l" data-iconpos="notext"> {{'back' | translate }}</a>
+        </div>
+        <div data-role="content">
+            <form>
+                <label for="new-username" class="ui-hidden-accessible">Username:</label> 
+                <input type="text" name="new-username" id="new-username" value="" placeholder="username"  > 
+                <label for="new-password" class="ui-hidden-accessible">Password:</label> 
+                <input type="password" name="new-password" id="new-password" value="" placeholder="password"  >
+                <label for="new-email" class="ui-hidden-accessible">Email:</label> 
+                <input type="email" name="new-email" id="new-email" value="" placeholder="email" >
+                <button type="button" data-theme="a" data-icon="bullets" onclick='newUserRegistration()'> {{'create' | translate }}</button>
+            </form>
+                   
+            <!-- popup  message -->
+            <div data-role="popup" id="create-user-message-popup"data-theme="a" >
+                <a href="#" onclick="loadHomePage()" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
+                <span id="create-user-popup-message"></span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Keyword Search Page -->
     <div data-role="page" id="keyword-search-page" data-prefetch="true" data-dom-cache="true">
         <div data-role="header">
             <h1> {{'searchKeyword' | translate }}</h1>
@@ -296,7 +195,7 @@
             <span style="text-align: center;font-weight: bold;color: green; display: none;" id="searchResultMsg"></span>
             <div>
                    <ul id="masonry-authors-search-list" calss="masonry-authors-list" style="list-style: none; width: 100%"  >
-    			</ul>
+        		</ul>
 			</div>
         </div>
     </div>
@@ -328,10 +227,114 @@
             <span id="login-popup-error-msg"></span>
         </div>   
     </div>
-
-
-
-
+    
+    <!-- Change Language Page -->
+    <div data-role="page" id="change-language-page">
+        <div data-role="header">
+            <h3>{{'changeLanguage' | translate }}</h3>
+            <a href="#home-main-page" data-icon="arrow-l" data-iconpos="notext"> {{'homeMenu' | translate }}</a>
+        </div>
+        <div data-role="content">
+            <ul data-role="listview" >
+                <li ng-repeat="language in languageList">
+                    <a href="#" ng-click='changeLanguage(language)'  >{{language}}</a>                            
+                </li>
+            </ul>
+        </div>
+    </div>
+  
+   <!-- Forgot password page -->
+    <div data-role="page" id="forgot-passowrd-page" >
+        <div data-role="header">
+            <h3> {{'forgotPwd' | translate }}</h3>
+            <a href="#"  onclick="loadHomePage()"  data-icon="arrow-l" data-iconpos="notext"> {{'back' | translate }}</a>
+        </div>
+        <div data-role="content">
+            <h5> {{'fpHeaderMsg' | translate }}</h5>
+            <form>
+                <label for="fEmail" class="ui-hidden-accessible">Email:</label> 
+                <input type="email" name="fEmail" id="fEmail" value="" placeholder="email" >            
+                <button type="button" data-theme="a" data-icon="gear" onclick="validateAndSendResetPasswordLink()"> {{'fpHeaderMsg' | translate }}</button>
+            </form>
+        </div>
+        <!-- popup success message -->
+        <div data-role="popup" id="forgot-password-success-message-popup" data-theme="a">
+            <a href="#" onclick="loadHomePage()" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
+            <p>
+                {{'fpSuccessMsg' | translate }}
+            </p>
+        </div>
+        
+        <!-- popup Error message -->
+        <div data-role="popup" id="forgot-password-error-message-popup"data-theme="a" >
+            <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> {{'close' | translate }}</a>
+            <p>
+                {{'fpErrorMsg' | translate }}
+    	    </p>
+        </div>
+    </div>
+    
+    <!--ComicDisplay Page -->
+    <div data-role="page" id="comic-view-page"  data-theme="a" data-dom-cache="true" >
+        <div data-role="content" id="imageContentArea"
+            style="text-align: center; clear: both; width: 100%; height: 100%; padding: 0px; margin: 0px">
+        	<div id="artImageView"
+				style="clear: both; margin: 0 auto; padding: 0px;">
+				<img id="artImgCont" src=""
+					style="position: relative; float: left; display: block;" alt="Loading Image..."/>				
+				<div id="adNetworkContainer" style="display: none; ">				
+				</div>			
+				<div id="tl" class="eventBox" onclick="prvImage()"
+					title="{{'tlTitle' | translate }}">
+				</div>
+				<div id="tr" class="eventBox rb" style="left: 50%;"
+					onclick="nxtImage()" title="{{'trTitle' | translate }}">
+				</div>
+				<a id="lftBxAnchor">
+					<div id="bl" class="eventBox" onclick="openGotoComicPopup()" title=""></div>
+				</a>
+                <a id="rgtBxAnchor">
+					<div id="br" class="eventBox rb" style="left: 50%;"
+						onclick="loadHomePage()" title=""></div>
+				</a>
+			</div>			
+		</div>   
+        
+        <!-- goto panel dialog -->
+        <div data-role="popup" id="goto-comic-dialog" data-overlay-theme="a" data-close-btn="right">
+            <div data-role="header">
+                <h3>{{'goToComic' | translate }}</h3>
+            </div>
+            <div data-role="content" data-theme="c">
+                <h3> {{'pageNumErr' | translate }}</h3>
+                <form>
+                    <fieldset class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <input type="text" name="comic-current-page-num-txt" id="comic-current-page-num-txt" value="" 
+                                data-theme="c" >                     
+                        </div>
+                        <div class="ui-block-b">
+                            <input type="text" name="comic-total-page-num-txt" id="comic-total-page-num-txt" value=""
+                                data-theme="c" >                        
+                        </div>	   
+                    </fieldset> 
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                	        <a href="#" onclick="shareOnFacebookArt()">
+                                <img alt="follow me on facebook" src="http://login.create.net/images/icons/user/facebook_30x30.png" border=0>                                
+                            </a>
+				        </div>
+                        <div data-icon="twitter" >
+            		        <a href="#" onclick="shareOnTwitterArt()">
+                	            <img alt="follow me on twitter" src="http://login.create.net/images/icons/user/twitter_30x30.png" border=0>
+            		        </a>
+			    	    </div> 
+                    <button type="button" data-theme="a" data-icon="action" onclick="displayComicByPanelNumber()">Ok {{'ok' | translate }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
     
     <!-- Loading script files --> 
     
@@ -341,6 +344,9 @@
     <script type="text/javascript" src="../js/lib/masonry/masonry.pkgd.min.js"></script>
     <script type="text/javascript" src="../js/lib/jquery-cookie/jquery.cookie.js"></script>
     <script type="text/javascript" src="../js/lib/image-center/jquery.blImageCenter.js"></script>
+    <script type="text/javascript" src="../js/lib/facebook/openfb.js"></script>
+    
+    
     <script type="text/javascript" src="../js/app/home-load-authors.js"></script>
     <script type="text/javascript" src="../js/app/common-paging.js"></script>
     <script type="text/javascript" src="../js/app/common-image-loading.js"></script> 
@@ -349,6 +355,7 @@
     <script type="text/javascript" src="../js/app/home-auth.js"></script>
     <script type="text/javascript" src="../js/app/solr-common.js"></script>
     <script type="text/javascript" src="../js/app/solr-search.js"></script>
+    
     
     <!-- Angular scripts -->
     
