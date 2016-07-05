@@ -15,31 +15,31 @@
         document.addEventListener("deviceready", onDeviceReady, false);        
     }    
     
-    function onDeviceReady() {   
+    function onDeviceReady() { 
+       openFB.init({appId: '258489264507231'});
+       // openFB.init({appId: '1471415316497177'});
         document.addEventListener("backbutton", onBackButtonCallback, false);        
     } 
     
     function onBackButtonCallback() { 
         console.log(window.location.href)
-        if(isHomePage()) {
+        if(isHomeMainPage()) {
             exitAppPopup();
-        }else if(isProfilePage()){
+        }else if(isProfileMainPage()){
              logout();
-        } else{
-  //           $.cookie('isCookie', false);    
-  //   	$.cookie('currentArtIndex', -1);
-		// $.cookie('currentArtistArts', null);
-		// $.cookie('selectedArtist', null);
-  //       console.log('going back....')
-             window.history.back();
+        } else{            
+            if(isHomeComicViewPage()){
+                window.location.href = 'home.html';
+            }else if(isProfileComicViewPage()){
+                window.location.href = 'profile.html';
+            }else{
+                // window.history.back();
+            history.go(-1);
+            }            
        }
     }   
     
     function exitAppPopup() {
-  //       $.cookie('isCookie', false);    
-  //   	$.cookie('currentArtIndex', -1);
-		// $.cookie('currentArtistArts', null);
-		// $.cookie('selectedArtist', null);
         navigator.notification.confirm(
             "Do you really want to close this app?", 
             function(buttonIndex){
@@ -63,10 +63,6 @@
     };
      
     function logout(){
-  //       $.cookie('isCookie', false);    
-  //   	$.cookie('currentArtIndex', -1);
-		// $.cookie('currentArtistArts', null);
-		// $.cookie('selectedArtist', null);
         $.getJSON(REST_SERVER+'logOut',
     					function(data) {
 			if (data.response = "success") {
@@ -84,40 +80,59 @@
 		});
     }
            
-    function isHomePage(){
+    function isHomeMainPage(){
         if(window.location.href.indexOf("home.html") > -1 ){
             if(window.location.href.indexOf("comic-view-page") > -1 ||
                 window.location.href.indexOf("create-user-page") > -1  ||
                 window.location.href.indexOf("keyword-search-page") > -1 ||
                 window.location.href.indexOf("about-author-page") > -1 ||
                 window.location.href.indexOf("forgot-passowrd-page") > -1 ||
-                window.location.href.indexOf("login-page") > -1 ){
-                    loadHomePage();
+                window.location.href.indexOf("login-page") > -1 ){                    
                     return false;
             }else{
                 return true;
             }
-        } else {
-             loadHomePage();
+        } else {            
             return false;
         }            
     }
     
-    function isProfilePage(){
+    function isProfileMainPage(){
         if(window.location.href.indexOf("profile.html") > -1 ){
             if(window.location.href.indexOf("comic-view-page") > -1 ||
                 window.location.href.indexOf("profile-setting-page") > -1  ||
                 window.location.href.indexOf("keyword-search-page") > -1 ||
                 window.location.href.indexOf("about-author-page") > -1 ||
-                window.location.href.indexOf("manage-favorite-page") > -1 ){
-                    console.log('dsadasd ldasd')
-                    loadProfileHomePage();
+                window.location.href.indexOf("manage-favorite-page") > -1 ){                    
                     return false;
             }else{
                 return true;
             }
-        } else {
-            loadProfileHomePage();
+        } else {            
+            return false;
+        }            
+    }
+
+    function isHomeComicViewPage(){
+        if(window.location.href.indexOf("home.html") > -1 ){
+            if(window.location.href.indexOf("comic-view-page") > -1){                    
+                    return true;
+            }else{
+                return false;
+            }
+        } else {            
+            return false;
+        }            
+    }
+    
+    function isProfileComicViewPage(){
+        if(window.location.href.indexOf("profile.html") > -1 ){
+            if(window.location.href.indexOf("comic-view-page") > -1 ){                    
+                    return true;
+            }else{
+                return false;
+            }
+        } else {            
             return false;
         }            
     }

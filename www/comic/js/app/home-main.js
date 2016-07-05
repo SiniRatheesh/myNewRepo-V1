@@ -9,7 +9,7 @@ var stMinutes = todayDate.getMinutes();
 var stSeconds = todayDate.getSeconds();
 
 
-openFB.init({appId: '1471415316497177'});
+
 
 function shareOnFacebook(){
     var url = "http://www.facebook.com/sharer/sharer.php?u=www.comikka.com";
@@ -21,37 +21,47 @@ function shareOnTwitter(){
     windowOpenIntent(url);
 }
 
-// function shareOnFacebookArt(){
-//    // var descriptionCOmics = $('#comicDescription').html(descriptionforComic).text();
-//        	  FB.ui({
-//     		  method: 'share',
-//     		  title:screenName,
-//     		  href: 'http://www.comikka.com/artist/' +userId,
-//     		  picture: imageUrl,
-//     	        caption: 'comikka',
-//     	      //  description: descriptionCOmics
-//               description: descriptionforComic
-//     		}, function(response){console.log(response);});
-// }
+function shareOnFacebookArt(){
+   // var descriptionCOmics = $('#comicDescription').html(descriptionforComic).text();
+       	  FB.ui({
+    		  method: 'share',
+    		  title:screenName,
+    		  href: 'http://www.comikka.com/artist/' +userId,
+    		  picture: imageUrl,
+    	        caption: 'comikka',
+    	      //  description: descriptionCOmics
+              description: descriptionforComic
+    		}, function(response){console.log(response);});
+}
 
- function shareOnFacebookArt() {
-        openFB.api({
-            method: 'POST',
-            path: '/me/feed',
-            params: {
-                message: descriptionforComic,
-                title:screenName,
-                picture: imageUrl,
-                caption: 'comikka'
-                // href: 'http://www.comikka.com/artist/' +userId
-            },
-            success: function() {
-                console.log('the item was posted on Facebook');
-            },
-            error: function(e) {
-                console.log('error ' + JSON.stringify(e));
-            }});
-    }
+ // function shareOnFacebookArt() {
+ //    openFB.login(
+ //                function(response) {
+ //                    if(response.status === 'connected') {
+ //                        console.log('Facebook login succeeded, got access token: ' + response.authResponse.accessToken);
+ //                         openFB.api({
+ //            method: 'POST',
+ //            path: '/me/feed',
+ //            params: {
+ //                message: descriptionforComic,
+ //                title:screenName,
+ //                picture: imageUrl,
+ //                link: imageUrl,
+ //                caption: 'comikka',
+ //                 href: 'http://www.comikka.com/artist/' +userId
+ //            },
+ //            success: function() {
+ //                console.log('the item was posted on Facebook');
+ //            },
+ //            error: function(e) {
+ //                console.log('error ' + JSON.stringify(e));
+ //            }});
+ //                    } else {
+ //                        console.log('Facebook login failed: ' + response.error);
+ //                    }
+ //                }, {scope: 'email,read_stream,publish_actions,manage_pages,publish_pages,publish_stream,user_status'});
+ //       
+ //    }
 function shareOnTwitterArt(){
     var url = "http://twitter.com/intent/tweet?text=CheckOut&hashtags=Comikka,mobileComics&url=http://www.comikka.com/artist/"+userId;
     windowOpenIntent(url);

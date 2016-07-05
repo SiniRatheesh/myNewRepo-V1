@@ -33,8 +33,14 @@
 	color: black;
 }
 
-
-
+.social-container {
+    margin-top: 5px; 
+    height:30px;     
+}
+.left-social, .right-social {
+    float: left;
+    padding: 5px;    
+}
 .eventBox {
     position: absolute;
 	float: left;

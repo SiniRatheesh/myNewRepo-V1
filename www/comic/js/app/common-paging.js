@@ -51,20 +51,18 @@ $(document).on("click", "#comicDescription a", function(e){e.preventDefault();
 
 function loadHomePage()
 {
-    $.mobile.changePage("#home-main-page", { transition: "none" });
- //    $.cookie('isCookie', false);    
- //    $.cookie('currentArtIndex', -1);
-	// $.cookie('currentArtistArts', null);
-	// $.cookie('selectedArtist', null);
-    listMasonry();
-    reloadMasonry();
+    // $.mobile.changePage("#home-main-page", { transition: "none" });
+    // listMasonry();
+    // reloadMasonry();
+    window.location.href = "home.html";
 }
 
 function loadAboutAuthorPage(){
    $.mobile.changePage("#about-author-page",{ transition: "none"});
 }
 function historyBack(){
-    window.history.back();
+    //window.history.back();
+     history.go(-1);
 }
 
 
@@ -108,15 +106,15 @@ $(document)
         windowOpenIntent(url);
     }
 
-function windowOpenIntent(location){
-    window.plugins.webintent.startActivity({
-        action: window.plugins.webintent.ACTION_VIEW,
-        url: location
-    }, function() {}, function(){
-        console.log('Failed to open URL via Android Intent');
-        window.open(url, '_blank', 'location=yes');
-    });
-}
+    function windowOpenIntent(location){
+        window.plugins.webintent.startActivity({
+            action: window.plugins.webintent.ACTION_VIEW,
+            url: location
+        }, function() {}, function(){
+            console.log('Failed to open URL via Android Intent');
+            window.open(url, '_blank', 'location=yes');
+        });
+    }
     function getDescriptionAboutTheAuthor(artistId){
     	 $('#comicScreenName').text('');
 		 $('#comicDescription').text('');
@@ -156,9 +154,10 @@ function windowOpenIntent(location){
     // PROFILE PAGE
     
 function loadProfileHomePage(){
-   $.mobile.changePage("#profile-main-page",{transition: "none"});
-    listMasonry();
-    reloadMasonry();
+   // $.mobile.changePage("#profile-main-page",{transition: "none"});
+   //  listMasonry();
+   //  reloadMasonry();
+   window.location.href = "profile.html";
 }
     
     
